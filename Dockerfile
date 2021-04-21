@@ -5,6 +5,8 @@
 # -- Stage 1 -- #
 # Compile the app.
 FROM golang:1.12-alpine as builder
+ARG MY_BUILD_ENV_VAR
+ARG APP_VAR_MY_BUILD_ENV_VAR
 WORKDIR /app
 # The build context is set to the directory where the repo is cloned.
 # This will copy all files in the repo to /app inside the container.
@@ -12,6 +14,9 @@ WORKDIR /app
 #   can use the source_dir app spec option, see: https://www.digitalocean.com/docs/app-platform/references/app-specification-reference/
 COPY . .
 RUN go build -mod=vendor -o bin/hello
+RUN echo $MY_BUILD_ENV_VAR
+RUN echo $APP_VAR_MY_BUILD_ENV_VAR
+RUN env
 
 # -- Stage 2 -- #
 # Create the final environment with the compiled binary.
